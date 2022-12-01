@@ -45,6 +45,7 @@ const onHrefChanged = (action: () => void) => {
     if (!body) return;
 
     let oldHref = document.location.href;
+    // using MutationObserver to detect angular router changes since that's the method I found works best
     const observer = new MutationObserver(() => {
         const newHref = document.location.href;
         if (oldHref === newHref)
@@ -62,7 +63,6 @@ const onHrefChanged = (action: () => void) => {
 
 const cleanup = () => {
     cleanupAfter.forEach((cleanup) => cleanup());
-    console.log('disposed');
 }
 
 deflectGridWhenSubscriptionsLoaded();

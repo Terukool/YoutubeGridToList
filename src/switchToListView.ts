@@ -10,23 +10,17 @@ let cleanupAfter: (() => void)[] = [];
 const deflectGridWhenSubscriptionsLoaded = async () => {
     if (!isCurrentPathSubscriptions())
         return;
-        
-    cleanup();
 
     await waitForSubscriptionsPageToLoad();
 
     assertListView();
+    cleanup();
 };
 
 const isCurrentPathSubscriptions = () => {
-    const currentUrlPath = getURLPath();
+    const currentUrlPath = window.location.pathname;
     return currentUrlPath === YOUTUBE_SUBSCRIPTIONS_URL
 };
-
-const getURLPath = () => {
-    return window.location.pathname;
-};
-
 
 const waitForSubscriptionsPageToLoad = (): Promise<unknown> => {
     return Promise.race([waitForTheElement(LIST_VIEW_CLASS), waitForTheElement(GRID_VIEW_CLASS)]);
@@ -46,6 +40,10 @@ const isGridViewDisplayed = () => {
 
 
 const onHrefChanged = (action: () => void) => {
+    const body = document.querySelector('body');
+    
+    if (!body) return;
+
     let oldHref = document.location.href;
     const observer = new MutationObserver(() => {
         const newHref = document.location.href;
@@ -56,8 +54,6 @@ const onHrefChanged = (action: () => void) => {
 
         oldHref = newHref;
     });
-    const body = document.querySelector('body');
-    if (!body) return;
 
     observer.observe(body, { childList: true, subtree: true });
 

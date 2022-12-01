@@ -3,29 +3,18 @@ import { waitForTheElement } from "wait-for-the-element";
 const YOUTUBE_SUBSCRIPTIONS_URL = '/feed/subscriptions';
 const YOUTUBE_SUBSCRIPTIONS_LIST_PATH = '/feed/subscriptions?flow=2';
 const GRID_VIEW_CLASS = 'ytd-grid-renderer';
-const SOME_YOUTUBE_VIDEO_CLASS = 'ytd-video-preview';
+const LIST_VIEW_CLASS = 'ytd-shelf-renderer';
 
-const deflectGridView = () => {
-    if (isCurrentPathSubscriptions()) {
-        switchToListViewIfGrid();
-    }
+let cleanupAfter: (() => void)[] = [];
 
-    listenToSubscriptionChange();
-}
+const deflectGridWhenSubscriptionsLoaded = async () => {
+    if (!isCurrentPathSubscriptions())
+        return;
 
-const listenToSubscriptionChange = async () => {
-    window.addEventListener('hashchange', () => executeAfterPageLoad(switchToListViewIfGrid));
-    
-    const subscriptionsRedirects = document.querySelectorAll(`a[href*="${YOUTUBE_SUBSCRIPTIONS_URL}"]`);
+    await waitForSubscriptionsPageToLoad();
 
-    subscriptionsRedirects.forEach((element) => {
-        if (!(element instanceof HTMLElement))
-            return;
-
-        element.onclick = () => executeAfterPageLoad(switchToListViewIfGrid);
-    });
-
-    console.log('set', subscriptionsRedirects);
+    switchToListViewIfGrid();
+    cleanup();
 };
 
 const isCurrentPathSubscriptions = () => {
@@ -33,14 +22,18 @@ const isCurrentPathSubscriptions = () => {
     return currentUrlPath === YOUTUBE_SUBSCRIPTIONS_URL
 };
 
+const getURLPath = () => {
+    return window.location.pathname;
+};
+
+
+const waitForSubscriptionsPageToLoad = () : Promise<unknown> => {
+    return Promise.race([waitForTheElement(LIST_VIEW_CLASS), waitForTheElement(GRID_VIEW_CLASS)]);
+}
+
 const switchToListViewIfGrid = () => {
-
-    console.log('path matches...');
-
     if (!isGridViewDisplayed())
         return;
-
-    console.log('replacing...')
 
     window.location.replace(YOUTUBE_SUBSCRIPTIONS_LIST_PATH);
 };
@@ -51,18 +44,30 @@ const isGridViewDisplayed = () => {
     return gridViewItem !== null;
 }
 
-const getURLPath = () => {
-    return window.location.pathname;
-};
 
-const getHostWithNewPath = (newPath: string) => {
-    return `${window.location.host}${newPath}`;
+const onHrefChanged = (filterBy: (href: string) => boolean, action: () => void) => {
+    let oldHref = document.location.href;
+    const observer = new MutationObserver(() => {
+        const newHref = document.location.href;
+        if (oldHref === newHref)
+            return;
+
+        if (filterBy(newHref)) {
+            action();
+        }
+        oldHref = newHref;
+    });
+    const body = document.querySelector('body');
+    if (!body) return;
+
+    observer.observe(body, { childList: true, subtree: true });
+
+    cleanupAfter.push(() => observer.disconnect());
 }
 
-const executeAfterPageLoad = async (action: () => void) => {
-    await waitForTheElement(SOME_YOUTUBE_VIDEO_CLASS);
-
-    action();
+const cleanup = () => {
+    cleanupAfter.forEach((cleanup) => cleanup());
 }
 
-executeAfterPageLoad(deflectGridView);
+deflectGridWhenSubscriptionsLoaded();
+onHrefChanged((href) => href.includes(YOUTUBE_SUBSCRIPTIONS_URL), () => deflectGridWhenSubscriptionsLoaded());

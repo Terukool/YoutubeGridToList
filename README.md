@@ -1,11 +1,10 @@
 # <img src="public/icons/icon_48.png" width="45" align="left"> Youtube Grid To List
 
-My Chrome Extension
+Youtube Grid To List
 
 ## Features
 
-- Feature 1
-- Feature 2
+- Redirect all nasty grid views on youtube to list views !
 
 ## Install
 

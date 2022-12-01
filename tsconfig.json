@@ -8,6 +8,6 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "ts-dist"
   }
 }

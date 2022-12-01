@@ -5,7 +5,7 @@
 
 # production
 /build
-/dist
+/ts-dist
 
 # misc
 .DS_Store

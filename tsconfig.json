@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es2019",
     "module": "ESNext", 
     "esModuleInterop": true,           
     "forceConsistentCasingInFileNames": true,         
@@ -8,9 +8,6 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "ts-dist"
   },
-  "exclude": [
-    "../scripts"
-  ],
 }

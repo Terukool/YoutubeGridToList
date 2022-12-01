@@ -1117,6 +1117,11 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
+wait-for-the-element@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/wait-for-the-element/-/wait-for-the-element-4.0.1.tgz#1dafe3c3c629959221cb73eb1d65bf5a91d62879"
+  integrity sha512-/BY9U7RFr9EOE3VmiN8xgfigssUD4xSbvcMzegRTVjD8D+SGBnn4vv7aTTx+lBtdxWtMJP/bxi6PSdRHqqb8Jg==
+
 watchpack@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-2.4.0.tgz#fa33032374962c78113f93c7f2fb4c54c9862a5d"

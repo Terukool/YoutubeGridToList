@@ -1,6 +1,9 @@
+import { waitForTheElement } from "wait-for-the-element";
+
 const YOUTUBE_SUBSCRIPTIONS_URL = '/feed/subscriptions';
 const YOUTUBE_SUBSCRIPTIONS_LIST_PATH = '/feed/subscriptions?flow=2';
 const GRID_VIEW_CLASS = 'ytd-grid-renderer';
+const SOME_YOUTUBE_VIDEO_CLASS = 'ytd-video-preview';
 
 const deflectGridView = () => {
     if (isCurrentPathSubscriptions()) {
@@ -11,13 +14,15 @@ const deflectGridView = () => {
 }
 
 const listenToSubscriptionChange = async () => {
+    window.addEventListener('hashchange', () => executeAfterPageLoad(switchToListViewIfGrid));
+    
     const subscriptionsRedirects = document.querySelectorAll(`a[href*="${YOUTUBE_SUBSCRIPTIONS_URL}"]`);
 
     subscriptionsRedirects.forEach((element) => {
         if (!(element instanceof HTMLElement))
             return;
 
-        element.onclick = () => setTimeout(switchToListViewIfGrid);
+        element.onclick = () => executeAfterPageLoad(switchToListViewIfGrid);
     });
 
     console.log('set', subscriptionsRedirects);
@@ -54,15 +59,10 @@ const getHostWithNewPath = (newPath: string) => {
     return `${window.location.host}${newPath}`;
 }
 
-const executeAfterPageLoad = (action: () => void) => {
-    if (document.readyState === "complete") {
-        console.log('basa');
-        action();
-        return;
-    }
+const executeAfterPageLoad = async (action: () => void) => {
+    await waitForTheElement(SOME_YOUTUBE_VIDEO_CLASS);
 
-    document.addEventListener('readystatechange', () => console.log("FUCKY"));
-    document.addEventListener('readystatechange', () => action());
+    action();
 }
 
 executeAfterPageLoad(deflectGridView);

@@ -5,8 +5,6 @@ const YOUTUBE_SUBSCRIPTIONS_LIST_PATH = '/feed/subscriptions?flow=2';
 const GRID_VIEW_CLASS = 'ytd-grid-renderer';
 const LIST_VIEW_CLASS = 'ytd-shelf-renderer';
 
-let cleanupAfter: (() => void)[] = [];
-
 const deflectGridWhenSubscriptionsLoaded = async () => {
     if (!isCurrentPathSubscriptions())
         return;
@@ -14,7 +12,6 @@ const deflectGridWhenSubscriptionsLoaded = async () => {
     await waitForSubscriptionsPageToLoad();
 
     assertListView();
-    cleanup();
 };
 
 const isCurrentPathSubscriptions = () => {
@@ -57,12 +54,6 @@ const onHrefChanged = (action: () => void) => {
     });
 
     observer.observe(body, { childList: true, subtree: true });
-
-    cleanupAfter.push(() => observer.disconnect());
-}
-
-const cleanup = () => {
-    cleanupAfter.forEach((cleanup) => cleanup());
 }
 
 deflectGridWhenSubscriptionsLoaded();

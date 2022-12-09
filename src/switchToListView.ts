@@ -9,6 +9,8 @@ const deflectGridWhenSubscriptionsLoaded = async () => {
     if (!isCurrentPathSubscriptions())
         return;
 
+    console.log('Current page is Subscriptions');
+
     await waitForSubscriptionsPageToLoad();
 
     assertListView();
@@ -26,6 +28,8 @@ const waitForSubscriptionsPageToLoad = (): Promise<unknown> => {
 const assertListView = () => {
     if (!isGridViewDisplayed())
         return;
+    
+    console.log('subscriptions is list! changing...');
 
     window.location.replace(YOUTUBE_SUBSCRIPTIONS_LIST_PATH);
 };
@@ -53,7 +57,7 @@ const onHrefChanged = (action: () => void) => {
         oldHref = newHref;
     });
 
-    observer.observe(body, { childList: true, subtree: true });
+    observer.observe(body, { childList: true, subtree: true, attributes: true });
 }
 
 deflectGridWhenSubscriptionsLoaded();

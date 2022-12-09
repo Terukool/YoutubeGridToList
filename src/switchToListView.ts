@@ -2,14 +2,12 @@ import { waitForTheElement } from "wait-for-the-element";
 
 const YOUTUBE_SUBSCRIPTIONS_URL = '/feed/subscriptions';
 const YOUTUBE_SUBSCRIPTIONS_LIST_PATH = '/feed/subscriptions?flow=2';
-const GRID_VIEW_CLASS = 'ytd-grid-renderer';
-const LIST_VIEW_CLASS = 'ytd-shelf-renderer';
+const GRID_VIEW_SELECTOR = '.ytd-grid-video-renderer';
+const LIST_VIEW_SELECTOR = '.ytd-video-renderer';
 
 const deflectGridWhenSubscriptionsLoaded = async () => {
     if (!isCurrentPathSubscriptions())
         return;
-
-    console.log('Current page is Subscriptions');
 
     await waitForSubscriptionsPageToLoad();
 
@@ -22,20 +20,18 @@ const isCurrentPathSubscriptions = () => {
 };
 
 const waitForSubscriptionsPageToLoad = (): Promise<unknown> => {
-    return Promise.race([waitForTheElement(LIST_VIEW_CLASS), waitForTheElement(GRID_VIEW_CLASS)]);
+    return Promise.race([waitForTheElement(LIST_VIEW_SELECTOR), waitForTheElement(GRID_VIEW_SELECTOR)]);
 }
 
 const assertListView = () => {
-    if (!isGridViewDisplayed())
+    if (isListViewDisplayed())
         return;
-    
-    console.log('subscriptions is list! changing...');
 
     window.location.replace(YOUTUBE_SUBSCRIPTIONS_LIST_PATH);
 };
 
-const isGridViewDisplayed = () => {
-    const gridViewItem = document.querySelector(`.${GRID_VIEW_CLASS}`);
+const isListViewDisplayed = () => {
+    const gridViewItem = document.querySelector(LIST_VIEW_SELECTOR);
     return gridViewItem !== null;
 }
 
@@ -57,7 +53,7 @@ const onHrefChanged = (action: () => void) => {
         oldHref = newHref;
     });
 
-    observer.observe(body, { childList: true, subtree: true, attributes: true });
+    observer.observe(body, { attributes: true, attributeFilter: ['href'] });
 }
 
 deflectGridWhenSubscriptionsLoaded();

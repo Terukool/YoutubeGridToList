@@ -1,4 +1,4 @@
-# <img src="public/icons/icon_48.png" width="45" align="left"> Youtube Grid To List
+# <img src="src/icons/icon_48.png" width="45" align="left"> Youtube Grid To List
 
 Youtube Grid To List
 

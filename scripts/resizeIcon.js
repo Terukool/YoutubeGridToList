@@ -13,7 +13,7 @@ const resizeIcon = async () => {
             height: size
         });
 
-        writeFileSync(`public/icons/${ICON_NAME}_${size}.png`, image);
+        writeFileSync(`src/icons/${ICON_NAME}_${size}.png`, image);
     });
 }
 

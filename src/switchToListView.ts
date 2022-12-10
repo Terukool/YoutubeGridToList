@@ -50,7 +50,7 @@ const onHrefChanged = (action: () => void) => {
 
     if (!body) return;
 
-    let oldPathname : string | undefined = undefined;
+    let oldPathname : string = window.location.pathname;
     chrome.runtime.onMessage.addListener((message: RouteChangedEventMessage) => {
         console.log('got', message)
         if (message.type !== ROUTE_EVENT_NAME)

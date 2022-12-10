@@ -46,10 +46,6 @@ const isListViewDisplayed = () => {
 
 
 const onHrefChanged = (action: () => void) => {
-    const body = document.querySelector('body');
-
-    if (!body) return;
-
     let oldPathname : string = window.location.pathname;
     chrome.runtime.onMessage.addListener((message: RouteChangedEventMessage) => {
         console.log('got', message)

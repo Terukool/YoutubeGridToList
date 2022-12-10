@@ -8,7 +8,7 @@ Youtube Grid To List
 
 ## Install
 
-[**Chrome** extension]() <!-- TODO: Add chrome extension link inside parenthesis -->
+[**Chrome** extension](https://github.com/Terukool/YoutubeGridToList/releases/tag/Releases/latest) <!-- TODO: Add chrome extension link inside parenthesis -->
 
 ## Contribution
 

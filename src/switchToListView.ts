@@ -1,4 +1,4 @@
-import { RouteChangedEvent, ROUTE_EVENT_NAME } from './utils/routeChangedEvent';
+import { RouteChangedEventMessage , ROUTE_EVENT_NAME } from './utils/routeChangedEvent';
 import { waitForTheElement } from "wait-for-the-element";
 
 const YOUTUBE_SUBSCRIPTIONS_URL = '/feed/subscriptions';
@@ -38,9 +38,10 @@ const assertListView = () => {
 };
 
 const isListViewDisplayed = () => {
-    const gridViewItem = document.querySelector(LIST_VIEW_SELECTOR);
-    console.log(gridViewItem);
-    return gridViewItem !== null;
+    const gridViewItem = document.querySelector(GRID_VIEW_SELECTOR);
+    const listViewItem = document.querySelector(LIST_VIEW_SELECTOR);
+    console.log(gridViewItem, listViewItem);
+    return gridViewItem === null && listViewItem !== null;
 }
 
 
@@ -49,19 +50,19 @@ const onHrefChanged = (action: () => void) => {
 
     if (!body) return;
 
-    let oldHref = document.location.href;
-    chrome.runtime.onMessage.addListener((message: RouteChangedEvent) => {
+    let oldPathname : string | undefined = undefined;
+    chrome.runtime.onMessage.addListener((message: RouteChangedEventMessage) => {
         console.log('got', message)
         if (message.type !== ROUTE_EVENT_NAME)
             return;
 
-        const newHref = message.newPathname;
-        if (oldHref === newHref)
+        const { newPathname } = message;
+        if (oldPathname === newPathname)
             return;
 
         action();
 
-        oldHref = newHref;
+        oldPathname = newPathname;
     });
 }
 

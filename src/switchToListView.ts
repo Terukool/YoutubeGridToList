@@ -21,12 +21,13 @@ const deflectGridWhenSubscriptionsLoaded = async () => {
 
 const isCurrentPathSubscriptions = () => {
     const currentUrlPath = window.location.pathname;
-    return currentUrlPath === YOUTUBE_SUBSCRIPTIONS_URL
+
+    return currentUrlPath === YOUTUBE_SUBSCRIPTIONS_URL;
 };
 
 const waitForSubscriptionsPageToLoad = (): Promise<unknown> => {
     return Promise.race([waitForTheElement(LIST_VIEW_SELECTOR), waitForTheElement(GRID_VIEW_SELECTOR)]);
-}
+};
 
 const assertListView = () => {
     console.log('checking is list view is displayed...')
@@ -43,8 +44,7 @@ const isListViewDisplayed = () => {
     const listViewItem = document.querySelector(LIST_VIEW_SELECTOR);
     console.log(gridViewItem, listViewItem);
     return gridViewItem === null && listViewItem !== null;
-}
-
+};
 
 const onHrefChanged = (action: () => void) => {
     let oldPathname : string = window.location.pathname;
@@ -61,7 +61,7 @@ const onHrefChanged = (action: () => void) => {
 
         oldPathname = newPathname;
     });
-}
+};
 
 deflectGridWhenSubscriptionsLoaded();
 onHrefChanged(deflectGridWhenSubscriptionsLoaded);

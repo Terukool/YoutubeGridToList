@@ -3,8 +3,9 @@ import { waitForTheElement } from "wait-for-the-element";
 
 const YOUTUBE_SUBSCRIPTIONS_URL = '/feed/subscriptions';
 const YOUTUBE_SUBSCRIPTIONS_LIST_PATH = '/feed/subscriptions?flow=2';
-const GRID_VIEW_SELECTOR = '.ytd-grid-video-renderer';
-const LIST_VIEW_SELECTOR = '.ytd-video-renderer';
+const SUBSCRIPTIONS_CONTAINER_SELECTOR = 'ytd-browse[role="main"][page-subtype="subscriptions"]';
+const GRID_VIEW_SELECTOR = `${SUBSCRIPTIONS_CONTAINER_SELECTOR} .ytd-grid-video-renderer`;
+const LIST_VIEW_SELECTOR = `${SUBSCRIPTIONS_CONTAINER_SELECTOR} .ytd-video-renderer`;
 
 const deflectGridWhenSubscriptionsLoaded = async () => {
     console.log('checking if current page is subscriptions...')
